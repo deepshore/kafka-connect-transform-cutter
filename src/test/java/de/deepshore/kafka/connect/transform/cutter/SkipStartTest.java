@@ -31,8 +31,8 @@ public class SkipStartTest {
             ImmutableMap.of(SkipStartConfig.STARTSTRING_CONFIG, "start")
     );
 
-    this.input = "prefix_start_postfix";
-    this.expected = "start_postfix";
+    this.input = "prefix_start_start_postfix";
+    this.expected = "start_start_postfix";
   }
 
   @AfterEach
