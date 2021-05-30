@@ -3,7 +3,7 @@
 Das Projekt enthält zwei verschiedene Single-Message-Tranformatoren, mit denen sichergestellt werden kann,
 dass die Values bzw. Keys einzelner Kafka-Messages bei der Verarbeitung durch einen Kafka-Connector
 jeweils erst ab einer definierten Startsequenz bzw. bis nach einer definierten Endsequenz berücksichtigt werden.
-Zeichenfolgen könne vor der besagten Startsequenz bzw. nach der besagten Endsequenz de facto abgeschnitten werden.
+Zeichenfolgen können so vor der besagten Startsequenz bzw. nach der besagten Endsequenz de facto abgeschnitten werden.
 
 Beim Erzeugen des Projektes wurde auf [https://github.com/jcustenborder/kafka-connect-archtype](https://github.com/jcustenborder/kafka-connect-archtype) zurückgegriffen.
 
