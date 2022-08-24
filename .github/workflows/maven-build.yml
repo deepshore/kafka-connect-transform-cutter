@@ -1,0 +1,47 @@
+name: 'verify-build'
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - custombuild
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  maven:
+    name: 'maven-build'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Build with Maven
+        run: bin/mvn-deploy-github.sh
+        env:
+          GH_REPO: ${{ env.GITHUB_REPOSITORY }}
+          GH_DEPLOY_USERNAME: ${{ env.GITHUB_REPOSITORY_OWNER }}
+          GH_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: prepare artifact
+        run: |
+          cd target/components/packages
+          cp *.zip ${{ github.event.repository.name }}-${{ github.ref_name }}.zip
+          ls -lah
+
+      - name: Release
+        uses: fnkr/github-action-ghr@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GHR_PATH: target/components/packages/${{ github.event.repository.name }}-${{ github.ref_name }}.zip
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
