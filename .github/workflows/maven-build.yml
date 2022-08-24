@@ -15,7 +15,10 @@ jobs:
   maven:
     name: 'maven-build'
     runs-on: ubuntu-latest
-
+    env:
+      MVN_SETTINGS_TEMPLATE_FILE: .mvn/settings.xml.tmpl
+      MVN_SETTINGS_FILE: .mvn/settings.xml
+      POM_FILE: pom.xml
     steps:
       # Checkout the repository to the GitHub Actions runner
       - uses: actions/checkout@v2
@@ -26,14 +29,23 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Build with Maven
-        run: bin/mvn-deploy-github.sh
-        env:
-          GH_REPO: ${{ env.GITHUB_REPOSITORY }}
-          GH_DEPLOY_USERNAME: ${{ env.GITHUB_REPOSITORY_OWNER }}
-          GH_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare maven settings
+        run: |
+          sed -e "s/GH_REPO/${{ env.GITHUB_REPOSITORY }}/g" ${MVN_SETTINGS_TEMPLATE_FILE} > ${MVN_SETTINGS_FILE}
+          sed -e "s/GH_DEPLOY_USERNAME/${{ env.GITHUB_REPOSITORY_OWNER }}/g" ${MVN_SETTINGS_TEMPLATE_FILE} > ${MVN_SETTINGS_FILE}
+          sed -e "s/GH_DEPLOY_TOKEN/${{ secrets.GITHUB_TOKEN }}/g" ${MVN_SETTINGS_TEMPLATE_FILE} > ${MVN_SETTINGS_FILE}
+
+      - name: Prepare release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mvn -s ${MVN_SETTINGS_FILE} release:prepare -DreleaseVersion=${{ github.ref_name }} -Dresume=false -DpushChanges=false || true
+
+      - name: Deploy
+        run: |
+          mvn -s ${MVN_SETTINGS_FILE} --batch-mode deploy -Dlicense.skip=true
 
       - name: prepare artifact
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd target/components/packages
           cp *.zip ${{ github.event.repository.name }}-${{ github.ref_name }}.zip
