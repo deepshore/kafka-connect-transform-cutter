@@ -3,7 +3,7 @@
 
     <groupId>de.deepshore.kafka.connect.transform.cutter</groupId>
     <artifactId>kafka-connect-transform-cutter</artifactId>
-    <version>v1.2.2</version>
+    <version>1.2.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>kafka-connect-transform-cutter</name>
@@ -20,7 +20,7 @@
         <developerConnection>scm:git:git@github.com:deepshore/kafka-connect-transform-cutter.git
         </developerConnection>
         <url>https://github.com/deepshore/kafka-connect-transform-cutter.git</url>
-      <tag>kafka-connect-transform-cutter-v1.2.2</tag>
+      <tag>HEAD</tag>
   </scm>
     <issueManagement>
         <system>github</system>
