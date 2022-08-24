@@ -27,16 +27,16 @@ public class SkipStart<R extends ConnectRecord<R>> extends BaseKeyValueTransform
 
   @Override
   public void close() {
-
+    //noop
   }
 
   @Override
-  protected SchemaAndValue processBytes(R record, Schema inputSchema, byte[] input) {
-    return processString(record, inputSchema, new String(input));
+  protected SchemaAndValue processBytes(R rec, Schema inputSchema, byte[] input) {
+    return processString(rec, inputSchema, new String(input));
   }
 
   @Override
-  protected SchemaAndValue processString(R record, Schema inputSchema, String input) {
+  protected SchemaAndValue processString(R rec, Schema inputSchema, String input) {
     final Schema outputSchema = inputSchema.STRING_SCHEMA;
 
     String output = input;
