@@ -10,7 +10,7 @@ sed -e "s/GH_DEPLOY_TOKEN/${GH_DEPLOY_TOKEN}/g" ${MVN_SETTINGS_TEMPLATE_FILE} > 
 
 if [[ $GITHUB_REF_NAME =~ '^[0-9].*$' ]]; then
   echo "creating release version ${GITHUB_REF_NAME#v}"
-  mvn -s ${MVN_SETTINGS_FILE} release:prepare -DreleaseVersion=${GITHUB_REF_NAME#v} || true
+  mvn -s ${MVN_SETTINGS_FILE} release:prepare -DreleaseVersion=${GITHUB_REF_NAME#v} -Dresume=false -DpushChanges=false || true
 fi
 
 mvn -s ${MVN_SETTINGS_FILE} --batch-mode deploy -Dlicense.skip=true
