@@ -38,7 +38,7 @@ jobs:
       - name: Prepare release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          mvn -s ${MVN_SETTINGS_FILE} release:prepare -DreleaseVersion=${{ github.ref_name }} -Dresume=false -DpushChanges=false || true
+          mvn -s ${MVN_SETTINGS_FILE} --batch-mode release:prepare -Dlicense.skip=true -DreleaseVersion=${{ github.ref_name }} -Dresume=false -DpushChanges=false || true
 
       - name: Deploy
         run: |
